@@ -47,6 +47,28 @@ kaart wel niet als gewone Pi in een gedeeld netwerk.
    - `testrapport-<serienummer>-<datum>.txt`: het volledige rapport
    - `pitest-overzicht.csv`: één regel per geteste Pi (open in Excel)
 
+## Opstarten vanaf een USB-stick (optioneel)
+
+Dezelfde `pitest.img.xz` kan ook op een USB-stick in plaats van een SD-kaart. Flash hem op dezelfde
+manier. De SD-kaart blijft de betere keuze voor onbekende Pi's: die werkt altijd, ook op oude Pi 4's,
+en test de SD-sleuf mee. Een stick is vooral handig als je vermoedt dat de SD-sleuf zelf kapot is.
+
+**Opstarten:**
+
+- Er mag **geen SD-kaart** in de Pi zitten. Een Pi probeert eerst de SD-kaart en pas daarna USB.
+- Een **oudere Pi 4** start misschien niet van USB. Opstarten van USB werkt pas met een nieuwere
+  bootloader. Die update je één keer:
+  - met een SD-kaart via Raspberry Pi Imager: **Misc utility images** → **Bootloader** → **USB Boot**
+  - of op een draaiende Pi met `sudo rpi-eeprom-update -a`
+- Een **Pi 5** start alleen van USB met de officiële **27 W-voeding**. Met een zwakkere voeding weigert
+  hij, omdat hij dan te weinig stroom naar USB kan sturen.
+
+**Wat de test dan anders meet:**
+
+- De opslagtest test de USB-stick, niet meer de SD-sleuf van de Pi.
+- De USB-test ziet de opstartstick als apparaat en geeft dus **OK**. Dat bewijst alleen dat die ene
+  poort werkt, niet de andere drie.
+
 ## Live meekijken (optioneel)
 
 Wil je zien hoe ver de test staat? Log in via SSH (`ssh pitest@pi-tester.local`, wachtwoord `pitest`)
