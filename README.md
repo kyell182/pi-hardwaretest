@@ -99,8 +99,56 @@ internet haalt.
 ## Instellen
 
 Pas `pitest.conf` op de bootpartitie aan, gewoon vanaf je pc. Daar stel je de duur van
-de stresstest, de hoeveelheid RAM-test en optioneel GPIO-pinparen in. Voor GPIO verbind
-je twee pinnen met een jumperdraadje, bv. GPIO17 met GPIO27 → `gpio_pairs = 17-27`.
+de stresstest, de hoeveelheid RAM-test en optioneel GPIO-pinparen in.
+
+### GPIO-pinnen testen met een brug (optioneel)
+
+Met een **brug** (een jumperdraadje tussen twee pinnen) kan de Pi zijn eigen GPIO-pinnen
+testen. Zonder brug wordt deze test overgeslagen.
+
+**Zo werkt het:** de Pi zet de ene pin van het paar hoog en laag en leest op de andere pin
+of dat aankomt. Daarna draait hij het om. Komt het signaal niet door, dan is een van beide
+pinnen defect (of zit de draad los).
+
+**Zo doe je het:**
+
+1. **Zet de Pi uit** en haal de voeding eruit. Draadjes aansluiten onder spanning kan een
+   kortsluiting geven.
+2. Verbind twee pinnen met een female-female jumperdraadje. Gebruik de **pinnummers op de
+   header** (1 t/m 40, zie het schema hieronder), niet de GPIO-nummers.
+3. Zet de **GPIO-nummers** van die twee pinnen in `pitest.conf`, gescheiden door een
+   streepje: `gpio_pairs = 17-27`.
+4. Start de Pi weer op. In het rapport staat per richting of de pinnen werken.
+
+**Voorbeelden** (de pinnen liggen naast elkaar, handig voor een korte draad):
+
+| Brug tussen pin | GPIO-nummers    | Instelling in `pitest.conf` |
+| --------------- | --------------- | --------------------------- |
+| 11 en 13        | GPIO17 – GPIO27 | `gpio_pairs = 17-27`        |
+| 15 en 16        | GPIO22 – GPIO23 | `gpio_pairs = 22-23`        |
+
+Meerdere bruggen tegelijk? Scheid de paren met een komma: `gpio_pairs = 17-27, 22-23`.
+Gebruik elke pin maar in één paar.
+
+De 40-pins header heeft dezelfde indeling op de Pi 4 en de Pi 5. Links in elk schema
+staan de oneven pinnen (1, 3, 5, …), rechts de even pinnen (2, 4, 6, …).
+
+#### Raspberry Pi 5
+
+![Pinout van de 40-pins header van de Pi 5](docs/images/pi5_schema.png)
+
+#### Raspberry Pi 4 B
+
+![Pinout van de 40-pins header van de Pi 4 B](docs/images/pi4_b_schema.png)
+
+**Let op:**
+
+- Verbind **nooit** een GPIO-pin met een `3V3`-, `5V`- of `Ground`-pin. Dat kan de Pi
+  beschadigen. Gebruik alleen pinnen waar `GPIO` bij staat.
+- Vermijd `GPIO 2` en `GPIO 3` (pin 3 en 5): die hebben een vaste pull-up-weerstand
+  en geven kans op een vals resultaat.
+- De GPIO-test is nog niet op echte hardware gecontroleerd; meld het als de uitslag
+  niet klopt.
 
 ## Goed om te weten
 
