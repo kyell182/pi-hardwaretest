@@ -1,0 +1,8 @@
+# Images horen in een GitHub Release, niet in git
+*.img
+*.img.xz
+*.zip
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,14 @@
+[Unit]
+Description=Raspberry Pi hardwaretest (rapport op bootpartitie)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/pitest
+ExecStartPre=/bin/sleep 20
+ExecStart=/usr/bin/python3 -m pitest
+StandardOutput=journal+console
+
+[Install]
+WantedBy=multi-user.target
